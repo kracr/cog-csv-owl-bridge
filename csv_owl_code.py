@@ -3,8 +3,20 @@
 
 # In[ ]:
 
+from base64 import encode
+from msilib.schema import Class
+from token import ENCODING
+import rdflib
+from rdflib import Graph, Literal, RDF, URIRef
+from rdflib.namespace import FOAF,XSD
+from rdflib import BNode
+from rdflib.namespace import CSVW, DC, DCAT, DCTERMS, DOAP, FOAF, ODRL2, ORG, OWL, \
+                           PROF, PROV, RDF, RDFS, SDO, SH, SKOS, SOSA, SSN, TIME, \
+                           VOID, XMLNS, XSD
+import pandas as pd
+import pprint
 
-def csv_owl_final(g):
+def csv_owl_final(subclass,domain_axiom, range_axiom, instances, g):
     g=Graph()
     
     #SUBCLASS
@@ -65,3 +77,10 @@ def csv_owl_final(g):
     
     g.serialize(destination='output.owl', format='pretty-xml')
 
+def main(file):
+    g = Graph()
+    subclass = pd.read_excel(file, sheet_name='subclass_axiom')
+    domain_axiom=pd.read_excel(file, sheet_name='domain_axiom')
+    range_axiom=pd.read_excel(file, sheet_name='range_axiom')
+    instances=pd.read_excel(file, sheet_name='instances_axiom')
+    csv_owl_final(subclass,domain_axiom, range_axiom, instances,g)
