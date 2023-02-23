@@ -1,8 +1,18 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
+import pandas as pd
+from base64 import encode
+from msilib.schema import Class
+from token import ENCODING
+import csv
+import rdflib
+from rdflib import Graph, Literal, RDF, URIRef
+from rdflib.namespace import FOAF,XSD
+from rdflib import BNode
+from rdflib.namespace import CSVW, DC, DCAT, DCTERMS, DOAP, FOAF, ODRL2, ORG, OWL, \
+                           PROF, PROV, RDF, RDFS, SDO, SH, SKOS, SOSA, SSN, TIME, \
+                           VOID, XMLNS, XSD
+import pandas as pd
+import pprint
+import os
 
 def owl_csv_subclass(g):
 
@@ -14,7 +24,7 @@ def owl_csv_subclass(g):
     for subj,obj in g.subject_objects(predicate=RDFS.subClassOf):
         subclass=(str)(subj).rsplit('/')[-1]
         classs=(str)(obj).rsplit('/')[-1]
-        print(classs + " " + subclass)
+        #print(classs + " " + subclass)
         rows = [subclass, classs]
         writer.writerow(rows)
         class_dict[subclass]=class_dict.get(subclass,0)+1
@@ -23,7 +33,7 @@ def owl_csv_subclass(g):
         if predicate == rdflib.RDF.type:
             if obj==rdflib.RDFS.Class:
                 subclass=(str)(subject).rsplit('/')[-1]
-                print(subclass)
+                #print(subclass)
                 class_dict[subclass]=class_dict.get(subclass,0)+1
 
     for i in class_dict:
@@ -32,7 +42,8 @@ def owl_csv_subclass(g):
             writer.writerow(rows)
 
 
-    f.close()  
+    f.close() 
+    return 'rdftocsv_subclass.csv' 
     
     
 
@@ -50,6 +61,7 @@ def owl_csv_domain(g):
             writer.writerow(rows)
 
     f.close()
+    return 'rdftocsv_domain.csv'
     
 
 def owl_csv_range(g):
@@ -66,6 +78,7 @@ def owl_csv_range(g):
             writer.writerow(rows)
 
     f.close()
+    return 'rdftocsv_range.csv'
 
     
 def owl_csv_instances(g):
@@ -91,14 +104,34 @@ def owl_csv_instances(g):
                 if str(s) == str(obj):
                     subj=(str)(subject).rsplit('/')[-1]
                     objj=(str)(obj).rsplit('/')[-1]
-                    print(subj + " " + objj)
+                    #print(subj + " " + objj)
                     rows = [subj, objj]
                     writer.writerow(rows)
     
     f.close()
+    return 'rdftocsv_instances.csv'
 
 
 
 
-owl_csv_instances(g)
+def main(file):
+    g = Graph()
+    g.parse(file)
+    f1 = owl_csv_domain(g)
+    f2 = owl_csv_subclass(g)
+    f3 = owl_csv_range(g)
+    f4 = owl_csv_instances(g)
+
+    writer = pd.ExcelWriter('output.xlsx', engine='xlsxwriter')
+    for filename in [f1,f2,f3,f4]:
+        df = pd.read_csv(filename)
+        sheet_name = os.path.splitext(os.path.basename(filename))[0]
+        df.to_excel(writer, sheet_name=sheet_name, index=False)
+
+    writer.save()
+
+
+
+
+
 
