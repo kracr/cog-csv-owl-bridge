@@ -16,7 +16,7 @@ from rdflib.namespace import CSVW, DC, DCAT, DCTERMS, DOAP, FOAF, ODRL2, ORG, OW
 import pandas as pd
 import pprint
 
-def csv_owl_final(subclass,domain_axiom, range_axiom, instances, g):
+def csv_owl_final(subclass,domain_axiom, range_axiom, instances,subproperty,inverse, g):
     g=Graph()
     
     #SUBCLASS
@@ -73,14 +73,36 @@ def csv_owl_final(subclass,domain_axiom, range_axiom, instances, g):
         url2="http://example.org/ontology/"+b
         classs=URIRef(url2)
         g.add((object, RDF.type, classs))
-    
+
+    #SUBPROPERTY
+    col1=subproperty.iloc[:,0].values
+    col2=subproperty.iloc[:,1].values
+    for (a,b) in zip(col1,col2):
+        uri1="http://example.org/ontology/"+a
+        subprop=URIRef(uri1)
+        uri2="http://example.org/ontology/"+b
+        object=URIRef(uri2)
+        g.add((subprop, RDFS.subPropertyOf, object))
+
+    #INVERSE
+    col1=inverse.iloc[:,0].values
+    col2=inverse.iloc[:,1].values
+    for (a,b) in zip(col1,col2):
+        uri1="http://example.org/ontology/"+a
+        subprop=URIRef(uri1)
+        uri2="http://example.org/ontology/"+b
+        object=URIRef(uri2)
+        g.add((subprop, OWL.inverseOf, object))
+
     
     g.serialize(destination='output.owl', format='pretty-xml')
 
 def main(file):
     g = Graph()
-    subclass = pd.read_excel(file, sheet_name='subclass_axiom')
-    domain_axiom=pd.read_excel(file, sheet_name='domain_axiom')
-    range_axiom=pd.read_excel(file, sheet_name='range_axiom')
-    instances=pd.read_excel(file, sheet_name='instances_axiom')
-    csv_owl_final(subclass,domain_axiom, range_axiom, instances,g)
+    subclass = pd.read_excel(file, sheet_name='subclass')
+    domain_axiom=pd.read_excel(file, sheet_name='domain')
+    range_axiom=pd.read_excel(file, sheet_name='range')
+    instances=pd.read_excel(file, sheet_name='instances')
+    subproperty=pd.read_excel(file, sheet_name='subproperty')
+    inverse=pd.read_excel(file, sheet_name='inverseOf')
+    csv_owl_final(subclass,domain_axiom, range_axiom, instances, subproperty,inverse, g)
