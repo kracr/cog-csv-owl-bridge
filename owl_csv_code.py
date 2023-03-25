@@ -168,49 +168,134 @@ def owl_csv_inverseof(g):
     return 'inverseOf.csv'
 
 
-def owl_csv_somevaluesfrom(g):
+# def owl_csv_allvaluesfrom(g):
+#     fields = ['Class', 'Property']
+#     f = open('somevaluesfrom.csv', 'w')
+#     writer = csv.writer(f, lineterminator='\n')
+#     writer.writerow(fields)
+#     for subject, predicate, obj in g:
+#         if predicate == rdflib.OWL.allValuesFrom:
+#             rows = [subject, obj]
+#             writer.writerow(rows)
+
+#     f.close()
+#     return 'allvaluesfrom.csv'
+
+
+def owl_csv_allvaluesfrom(g, onproperty_dict):
+    
+    allvaluesfrom_dict={}
     fields = ['Class', 'Property']
-    f = open('somevaluesfrom.csv', 'w')
-    writer = csv.writer(f, lineterminator='\n')
+    f2 = open('allvaluesfrom1.csv', 'w')
+    writer = csv.writer(f2, lineterminator='\n')
+    writer.writerow(fields)
+    for subject, predicate, obj in g:
+        if predicate == rdflib.OWL.allValuesFrom:
+            rows = [subject, obj]
+            allvaluesfrom_dict[subject]=obj
+            writer.writerow(rows)
+
+    f2.close()
+
+
+    
+    f3=open('allvaluesfrom.csv','w')
+    writer1=csv.writer(f3, lineterminator='\n')
+    fields=['Class', 'OnProperty', 'Allvaluesfrom']
+    writer1.writerow(fields)
+    
+    fields = ['Class', 'Property']
+    # f4 = open('allvaluesfrom.csv', 'w')
+    # writer = csv.writer(f4, lineterminator='\n')
+    # writer.writerow(fields)
+    for i in allvaluesfrom_dict:
+        if i in onproperty_dict:
+            rows=[i, onproperty_dict[i], allvaluesfrom_dict[i]]
+            writer1.writerow(rows)
+    # for subject, predicate, obj in g:
+    #     if predicate == rdflib.OWL.allValuesFrom:
+    #         rows = [subject, obj]
+    #         writer1.writerow(rows)
+    #         if subject in onproperty_dict:
+    #             rows=[subject, onproperty_dict[subject], obj]
+    #             writer1.writerow(rows)
+
+
+    f3.close()
+    
+    return 'allvaluesfrom.csv'
+
+def owl_csv_somevaluesfrom(g, onproperty_dict):
+    somevaluesfrom_dict={}
+    fields = ['Class', 'Property']
+    f2 = open('somevaluesfrom1.csv', 'w')
+    writer = csv.writer(f2, lineterminator='\n')
     writer.writerow(fields)
     for subject, predicate, obj in g:
         if predicate == rdflib.OWL.someValuesFrom:
             rows = [subject, obj]
+            somevaluesfrom_dict[subject]=obj
+
             writer.writerow(rows)
 
-    f.close()
-    return 'somevaluesfrom.csv'
+    f2.close()
 
 
-def owl_csv_onproperty(g):
+    
+    f3=open('somevaluesfrom.csv','w')
+    writer1=csv.writer(f3, lineterminator='\n')
+    fields=['Class', 'OnProperty', 'SomeValuesfrom']
+    writer1.writerow(fields)
+    
     fields = ['Class', 'Property']
-    f = open('onproperty.csv', 'w')
-    writer = csv.writer(f, lineterminator='\n')
-    writer.writerow(fields)
-    for subject, predicate, obj in g:
-        if predicate == rdflib.OWL.onProperty:
-            rows = [subject, obj]
-            writer.writerow(rows)
+    # f4 = open('allvaluesfrom.csv', 'w')
+    # writer = csv.writer(f4, lineterminator='\n')
+    # writer.writerow(fields)
+    for i in somevaluesfrom_dict:
+        if i in onproperty_dict:
+            rows=[i, onproperty_dict[i], somevaluesfrom_dict[i]]
+            writer1.writerow(rows)
+    # for subject, predicate, obj in g:
+    #     if predicate == rdflib.OWL.someValuesFrom:
+    #         rows = [subject, obj]
+    #         writer1.writerow(rows)
+    #         if subject in onproperty_dict:
+    #             rows=[subject, onproperty_dict[subject], obj]
+    #             writer1.writerow(rows)
 
-    f.close()
-    return 'onproperty.csv'
+
+    f3.close()
+    
+    return 'somevaluesfrom.csv'    
 
 
 def main(file):
     g = Graph()
     g.parse(file)
+    fields = ['Class', 'OnProperty']
+    onproperty_dict={}
+    f1 = open('onproperty.csv', 'w')
+    writer = csv.writer(f1, lineterminator='\n')
+    writer.writerow(fields)
+    for subject, predicate, obj in g:
+        if predicate == rdflib.OWL.onProperty:
+            rows = [subject, obj]
+            onproperty_dict[subject]=obj
+            writer.writerow(rows)
+
+    f1.close()
     f1 = owl_csv_domain(g)
     f2 = owl_csv_subclass(g)
     f3 = owl_csv_range(g)
     f4 = owl_csv_instances(g)
     f5 = owl_csv_subproperty(g)
     f6 = owl_csv_inverseof(g)
-    f7 = owl_csv_somevaluesfrom(g)
-    f8 = owl_csv_onproperty(g)
+    f7 = owl_csv_allvaluesfrom(g, onproperty_dict)
+    f8 = owl_csv_somevaluesfrom(g, onproperty_dict)
     f9 = owl_csv_class(g)
 
     writer = pd.ExcelWriter('output.xlsx', engine='xlsxwriter')
-    for filename in [f1, f2, f3, f4, f5, f6, f7, f8, f9]:
+    for filename in [f9, f1, f2, f3, f4, f5, f6, f7, f8]:
         df = pd.read_csv(filename)
         sheet_name = os.path.splitext(os.path.basename(filename))[0]
         df.to_excel(writer, sheet_name=sheet_name, index=False)
