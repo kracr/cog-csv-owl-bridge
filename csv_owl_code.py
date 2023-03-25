@@ -18,7 +18,7 @@ import pprint
 from rdflib import BNode
 
 
-def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, inverse, onproperty, somevaluesfrom, owlclass, g):
+def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, inverse, allvaluesfrom, somevaluesfrom, owlclass, g):
     g = Graph()
 
     # CLASS
@@ -124,33 +124,82 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
         object = URIRef(b)
         g.add((subprop, OWL.inverseOf, object))
 
-    # OnProperty
-    col1 = onproperty.iloc[:, 0].values
-    col2 = onproperty.iloc[:, 1].values
-    for (a, b) in zip(col1, col2):
-        if (a.rsplit('/')[0] == 'http:'):
-            classs = URIRef(a)
-            property = URIRef(b)
-            g.add((classs, OWL.onProperty, property))
-        else:
-            print(a)
-            nodeid = BNode(a)
-            property = URIRef(b)
-            g.add((nodeid, OWL.onProperty, property))
+    # # OnProperty
+    # col1 = onproperty.iloc[:, 0].values
+    # col2 = onproperty.iloc[:, 1].values
+    # for (a, b) in zip(col1, col2):
+    #     if (a.rsplit('/')[0] == 'http:'):
+    #         classs = URIRef(a)
+    #         property = URIRef(b)
+    #         g.add((classs, OWL.onProperty, property))
+    #     else:
+    #         print(a)
+    #         nodeid = BNode(a)
+    #         property = URIRef(b)
+    #         g.add((nodeid, OWL.onProperty, property))
 
     # someValuesFrom
     col1 = somevaluesfrom.iloc[:, 0].values
     col2 = somevaluesfrom.iloc[:, 1].values
-    for (a, b) in zip(col1, col2):
-        if (a.rsplit('/')[0] == 'http:'):
+    col3 = somevaluesfrom.iloc[:, 2].values
+    for (a, b, c) in zip(col1, col2, col3):
+        if (a.rsplit('/')[0] == 'http:') and (c.split('/')[0]=='http:'):
             classs = URIRef(a)
-            property = URIRef(b)
-            g.add((classs, OWL.someValuesFrom, property))
-        else:
-            print(a)
-            nodeid = BNode(a)
-            property = URIRef(b)
-            g.add((nodeid, OWL.someValuesFrom, property))
+            onproperty = URIRef(b)
+            somevaluesfrom=URIRef(c)
+            g.add((classs, OWL.onProperty, onproperty))
+            g.add((classs, OWL.someValuesFrom, somevaluesfrom))
+        elif (a.split('/')[0]!='http:') and (c.split('/')[0]=='http:'):
+            classs=BNode(a)
+            onproperty = URIRef(b)
+            somevaluesfrom=URIRef(c)
+            g.add((classs, OWL.onProperty, onproperty))
+            g.add((classs, OWL.someValuesFrom, somevaluesfrom))
+        elif (a.split('/')[0]=='http:') and (c.split('/')[0]!='http'):
+            classs=URIRef(a)
+            onproperty=URIRef(b)
+            somevaluesfrom= BNode(c)
+            g.add((classs, OWL.onProperty, onproperty))
+            g.add((classs, OWL.someValuesFrom, somevaluesfrom))
+        elif (a.split('/')[0]!='http:') and (c.split('/')[0]!='http'):
+            classs=BNode(a)
+            onproperty=URIRef(b)
+            somevaluesfrom=BNode(c)
+            g.add((classs, OWL.onProperty, onproperty))
+            g.add((classs, OWL.someValuesFrom, somevaluesfrom))
+
+    
+    #allvaluesfrom
+    col1 = allvaluesfrom.iloc[:, 0].values
+    col2 = allvaluesfrom.iloc[:, 1].values
+    col3 = allvaluesfrom.iloc[:, 2].values
+    for (a, b, c) in zip(col1, col2, col3):
+        if (a.rsplit('/')[0] == 'http:') and (c.split('/')[0]=='http:'):
+            classs = URIRef(a)
+            onproperty = URIRef(b)
+            allvaluesfrom=URIRef(c)
+            g.add((classs, OWL.onProperty, onproperty))
+            g.add((classs, OWL.allValuesFrom, allvaluesfrom))
+        elif (a.split('/')[0]!='http:') and (c.split('/')[0]=='http:'):
+            classs=BNode(a)
+            onproperty = URIRef(b)
+            allvaluesfrom=URIRef(c)
+            g.add((classs, OWL.onProperty, onproperty))
+            g.add((classs, OWL.allValuesFrom, allvaluesfrom))
+        elif (a.split('/')[0]=='http:') and (c.split('/')[0]!='http'):
+            classs=URIRef(a)
+            onproperty=URIRef(b)
+            allvaluesfrom= BNode(c)
+            g.add((classs, OWL.onProperty, onproperty))
+            g.add((classs, OWL.allValuesFrom, allvaluesfrom))
+        elif (a.split('/')[0]!='http:') and (c.split('/')[0]!='http'):
+            classs=BNode(a)
+            onproperty=URIRef(b)
+            allvaluesfrom=BNode(c)
+            g.add((classs, OWL.onProperty, onproperty))
+            g.add((classs, OWL.allValuesFrom, allvaluesfrom))
+    
+
 
     g.serialize(destination='output.owl', format='xml')
 
@@ -164,8 +213,9 @@ def main(file):
     instances = pd.read_excel(file, sheet_name='instances')
     subproperty = pd.read_excel(file, sheet_name='subproperty')
     inverse = pd.read_excel(file, sheet_name='inverseOf')
-    onproperty = pd.read_excel(file, sheet_name='onproperty')
+    # onproperty = pd.read_excel(file, sheet_name='onproperty')
     somevaluesfrom = pd.read_excel(file, sheet_name='somevaluesfrom')
+    allvaluesfrom = pd.read_excel(file, sheet_name='allvaluesfrom')
 
     csv_owl_final(subclass, domain_axiom, range_axiom, instances,
-                  subproperty, inverse, onproperty, somevaluesfrom, owlclass, g)
+                  subproperty, inverse, allvaluesfrom, somevaluesfrom, owlclass, g)
