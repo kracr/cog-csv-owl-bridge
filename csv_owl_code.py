@@ -18,12 +18,22 @@ import pprint
 from rdflib import BNode
 
 
-def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, inverse, allvaluesfrom, somevaluesfrom, owlclass, g):
+def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, inverse, allvaluesfrom, somevaluesfrom,maxcardinality, owlclass, firstrest, g):
+    global iri_dict
+    
     g = Graph()
 
     # CLASS
     class1 = owlclass.iloc[:, 0].values
-    for a in class1:
+    for c1 in class1:
+        s=c1.split(':')
+        if len(s)==1:
+            a=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            a=iri_dict[pre]+thing
+        
         if (a.rsplit('/')[0] == 'http:'):
             owl_class = URIRef(a)
             g.add((owl_class, RDF.type, OWL.Class))
@@ -44,7 +54,23 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
     #         class1=BNode(a)
     #         g.add((class1,RDF.type, OWL.Class))
 
-    for (a, b) in zip(classs, parent):
+    for (c1, p1) in zip(classs, parent):
+
+        s=c1.split(':')
+        if len(s)==1:
+            a=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            a=iri_dict[pre]+thing
+
+        s=p1.split(':')
+        if len(s)==1:
+            b=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            b=iri_dict[pre]+thing
 
         if (b.rsplit('/')[0] == 'http:') and (a.rsplit('/')[0] == 'http:'):
             class1 = URIRef(a)
@@ -75,54 +101,230 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
     # DOMAIN
     object = domain_axiom.iloc[:, 0].values
     domain = domain_axiom.iloc[:, 1].values
-    for (a, b) in zip(object, domain):
+    for (o1, d1) in zip(object, domain):
+
+        s=o1.split(':')
+        if len(s)==1:
+            a=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            a=iri_dict[pre]+thing
+
+        s=d1.split(':')
+        if len(s)==1:
+            b=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            b=iri_dict[pre]+thing
+
+        if (b.rsplit('/')[0] == 'http:') and (a.rsplit('/')[0] == 'http:'):
+            obj = URIRef(a)
+            dom = URIRef(b)
+            g.add((obj, RDF.type, OWL.ObjectProperty))
+            g.add((obj, RDFS.domain, dom))
+        elif (b.rsplit('/')[0] == 'http:') and (a.rsplit('/')[0] != 'http:'):
+            obj = URIRef(b)
+            dom = BNode(a)
+            g.add((obj, RDF.type, OWL.ObjectProperty))
+            g.add((obj, RDFS.domain, dom))
+        elif (b.rsplit('/')[0] != 'http:') and (a.rsplit('/')[0] == 'http:'):
+            obj = URIRef(a)
+            dom = BNode(b)
+            g.add((obj, RDF.type, OWL.ObjectProperty))
+            g.add((obj, RDFS.domain, dom))
+        else:
+            obj = BNode(a)
+            dom = BNode(b)
+            g.add((obj, RDF.type, OWL.ObjectProperty))
+            g.add((obj, RDFS.domain, dom))
         # url1="http://example.org/ontology/"+a
-        obj = URIRef(a)
-        # url2="http://example.org/ontology/"+b
-        dom = URIRef(b)
-        g.add((obj, RDF.type, OWL.ObjectProperty))
-        g.add((obj, RDFS.domain, dom))
+        # obj = URIRef(a)
+        # # url2="http://example.org/ontology/"+b
+        # dom = URIRef(b)
+        # g.add((obj, RDF.type, OWL.ObjectProperty))
+        # g.add((obj, RDFS.domain, dom))
 
     # RANGE
     col1 = range_axiom.iloc[:, 0].values
     col2 = range_axiom.iloc[:, 1].values
-    for (a, b) in zip(col1, col2):
-        url1 = "http://example.org/ontology/"+a
-        obj = URIRef(a)
-        url2 = "http://example.org/ontology/"+b
-        range = URIRef(b)
-        g.add((obj, RDF.type, OWL.ObjectProperty))
-        g.add((obj, RDFS.range, range))
+    for (c1, c2) in zip(col1, col2):
+        s=c1.split(':')
+        if len(s)==1:
+            a=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            a=iri_dict[pre]+thing
+
+        s=c2.split(':')
+        if len(s)==1:
+            b=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            b=iri_dict[pre]+thing
+
+        if (b.rsplit('/')[0] == 'http:') and (a.rsplit('/')[0] == 'http:'):
+            obj = URIRef(a)
+            range = URIRef(b)
+            g.add((obj, RDF.type, OWL.ObjectProperty))
+            g.add((obj, RDFS.range, range))
+        elif (b.rsplit('/')[0] == 'http:') and (a.rsplit('/')[0] != 'http:'):
+            obj = URIRef(b)
+            range = BNode(a)
+            g.add((obj, RDF.type, OWL.ObjectProperty))
+            g.add((obj, RDFS.range, range))
+        elif (b.rsplit('/')[0] != 'http:') and (a.rsplit('/')[0] == 'http:'):
+            obj = URIRef(a)
+            range = BNode(b)
+            g.add((obj, RDF.type, OWL.ObjectProperty))
+            g.add((obj, RDFS.range, range))
+        else:
+            obj = BNode(a)
+            range = BNode(b)
+            g.add((obj, RDF.type, OWL.ObjectProperty))
+            g.add((obj, RDFS.range, range))
+        # url1 = "http://example.org/ontology/"+a
+        # obj = URIRef(a)
+        # # url2 = "http://example.org/ontology/"+b
+        # range = URIRef(b)
+        # g.add((obj, RDF.type, OWL.ObjectProperty))
+        # g.add((obj, RDFS.range, range))
 
     # INSTANCES
     col1 = instances.iloc[:, 0].values
     col2 = instances.iloc[:, 1].values
-    for (a, b) in zip(col1, col2):
-        url1 = "http://example.org/ontology/"+a
-        object = URIRef(a)
-        url2 = "http://example.org/ontology/"+b
-        classs = URIRef(b)
-        g.add((object, RDF.type, classs))
+    for (c1, c2) in zip(col1, col2):
+
+        s=c1.split(':')
+        if len(s)==1:
+            a=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            a=iri_dict[pre]+thing
+
+        s=c2.split(':')
+        if len(s)==1:
+            b=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            b=iri_dict[pre]+thing
+
+        if (b.rsplit('/')[0] == 'http:') and (a.rsplit('/')[0] == 'http:'):
+            object = URIRef(a)
+            classs = URIRef(b)
+            g.add((object, RDF.type, classs))
+        elif (b.rsplit('/')[0] == 'http:') and (a.rsplit('/')[0] != 'http:'):
+            object = URIRef(b)
+            classs = BNode(a)
+            g.add((object, RDF.type, classs))
+        elif (b.rsplit('/')[0] != 'http:') and (a.rsplit('/')[0] == 'http:'):
+            object = URIRef(a)
+            classs = BNode(b)
+            g.add((object, RDF.type, classs))
+        else:
+            object = BNode(a)
+            classs = BNode(b)
+            g.add((object, RDF.type, classs))
+
+        # url1 = "http://example.org/ontology/"+a
+        # object = URIRef(a)
+        # url2 = "http://example.org/ontology/"+b
+        # classs = URIRef(b)
+        # g.add((object, RDF.type, classs))
 
     # SUBPROPERTY
     col1 = subproperty.iloc[:, 0].values
     col2 = subproperty.iloc[:, 1].values
-    for (a, b) in zip(col1, col2):
-        uri1 = "http://example.org/ontology/"+a
-        subprop = URIRef(a)
-        uri2 = "http://example.org/ontology/"+b
-        object = URIRef(b)
-        g.add((subprop, RDFS.subPropertyOf, object))
+    for (c1, c2) in zip(col1, col2):
+
+        s=c1.split(':')
+        if len(s)==1:
+            a=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            a=iri_dict[pre]+thing
+
+        s=c2.split(':')
+        if len(s)==1:
+            b=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            b=iri_dict[pre]+thing
+
+        if (b.rsplit('/')[0] == 'http:') and (a.rsplit('/')[0] == 'http:'):
+            subprop = URIRef(a)
+            object = URIRef(b)
+            g.add((subprop, RDFS.subPropertyOf, object))
+        elif (b.rsplit('/')[0] == 'http:') and (a.rsplit('/')[0] != 'http:'):
+            subprop = URIRef(b)
+            object = BNode(a)
+            g.add((subprop, RDFS.subPropertyOf, object))
+        elif (b.rsplit('/')[0] != 'http:') and (a.rsplit('/')[0] == 'http:'):
+            subprop = URIRef(a)
+            object = BNode(b)
+            g.add((subprop, RDFS.subPropertyOf, object))
+        else:
+            subprop = BNode(a)
+            object= BNode(b)
+            g.add((subprop, RDFS.subPropertyOf, object))
+
+        # uri1 = "http://example.org/ontology/"+a
+        # subprop = URIRef(a)
+        # uri2 = "http://example.org/ontology/"+b
+        # object = URIRef(b)
+        # g.add((subprop, RDFS.subPropertyOf, object))
 
     # INVERSE
     col1 = inverse.iloc[:, 0].values
     col2 = inverse.iloc[:, 1].values
-    for (a, b) in zip(col1, col2):
-        uri1 = "http://example.org/ontology/"+a
-        subprop = URIRef(a)
-        uri2 = "http://example.org/ontology/"+b
-        object = URIRef(b)
-        g.add((subprop, OWL.inverseOf, object))
+    for (c1, c2) in zip(col1, col2):
+        
+        s=c1.split(':')
+        if len(s)==1:
+            a=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            a=iri_dict[pre]+thing
+
+        s=c2.split(':')
+        if len(s)==1:
+            b=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            b=iri_dict[pre]+thing
+
+        if (b.rsplit('/')[0] == 'http:') and (a.rsplit('/')[0] == 'http:'):
+            subprop = URIRef(a)
+            object = URIRef(b)
+            g.add((subprop, OWL.inverseOf, object))
+        elif (b.rsplit('/')[0] == 'http:') and (a.rsplit('/')[0] != 'http:'):
+            subprop = URIRef(b)
+            object = BNode(a)
+            g.add((subprop, OWL.inverseOf, object))
+        elif (b.rsplit('/')[0] != 'http:') and (a.rsplit('/')[0] == 'http:'):
+            subprop = URIRef(a)
+            object = BNode(b)
+            g.add((subprop, OWL.inverseOf, object))
+        else:
+            subprop = BNode(a)
+            object= BNode(b)
+            g.add((subprop, OWL.inverseOf, object))
+
+
+        # uri1 = "http://example.org/ontology/"+a
+        # subprop = URIRef(a)
+        # uri2 = "http://example.org/ontology/"+b
+        # object = URIRef(b)
+        # g.add((subprop, OWL.inverseOf, object))
 
     # # OnProperty
     # col1 = onproperty.iloc[:, 0].values
@@ -142,7 +344,32 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
     col1 = somevaluesfrom.iloc[:, 0].values
     col2 = somevaluesfrom.iloc[:, 1].values
     col3 = somevaluesfrom.iloc[:, 2].values
-    for (a, b, c) in zip(col1, col2, col3):
+    for (c1, c2, c3) in zip(col1, col2, col3):
+        s=c1.split(':')
+        if len(s)==1:
+            a=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            a=iri_dict[pre]+thing
+
+        s=c2.split(':')
+        if len(s)==1:
+            b=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            b=iri_dict[pre]+thing
+
+        s=c3.split(':')
+        if len(s)==1:
+            c=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            c=iri_dict[pre]+thing
+            
+
         if (a.rsplit('/')[0] == 'http:') and (c.split('/')[0]=='http:'):
             classs = URIRef(a)
             onproperty = URIRef(b)
@@ -173,7 +400,32 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
     col1 = allvaluesfrom.iloc[:, 0].values
     col2 = allvaluesfrom.iloc[:, 1].values
     col3 = allvaluesfrom.iloc[:, 2].values
-    for (a, b, c) in zip(col1, col2, col3):
+    for (c1, c2, c3) in zip(col1, col2, col3):
+        s=c1.split(':')
+        if len(s)==1:
+            a=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            a=iri_dict[pre]+thing
+
+        s=c2.split(':')
+        if len(s)==1:
+            b=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            b=iri_dict[pre]+thing
+
+        s=c3.split(':')
+        if len(s)==1:
+            c=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            c=iri_dict[pre]+thing
+            
+
         if (a.rsplit('/')[0] == 'http:') and (c.split('/')[0]=='http:'):
             classs = URIRef(a)
             onproperty = URIRef(b)
@@ -199,7 +451,116 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
             g.add((classs, OWL.onProperty, onproperty))
             g.add((classs, OWL.allValuesFrom, allvaluesfrom))
     
+    #maxcardinality
+    col1 = maxcardinality.iloc[:, 0].values
+    col2 = maxcardinality.iloc[:, 1].values
+    col3 = maxcardinality.iloc[:, 2].values
+    for (c1, c2, c3) in zip(col1, col2, col3):
+        s=c1.split(':')
+        if len(s)==1:
+            a=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            a=iri_dict[pre]+thing
 
+        s=c2.split(':')
+        if len(s)==1:
+            b=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            b=iri_dict[pre]+thing
+
+        s=c3.split(':')
+        if len(s)==1:
+            c=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            c=iri_dict[pre]+thing
+            
+
+        if (a.rsplit('/')[0] == 'http:') and (c.split('/')[0]=='http:'):
+            classs = URIRef(a)
+            onproperty = URIRef(b)
+            maxcardinality=URIRef(c)
+            g.add((classs, OWL.onProperty, onproperty))
+            g.add((classs, OWL.maxCardinality, maxcardinality))
+        elif (a.split('/')[0]!='http:') and (c.split('/')[0]=='http:'):
+            classs=BNode(a)
+            onproperty = URIRef(b)
+            maxcardinality=URIRef(c)
+            g.add((classs, OWL.onProperty, onproperty))
+            g.add((classs, OWL.maxCardinality, maxcardinality))
+        elif (a.split('/')[0]=='http:') and (c.split('/')[0]!='http'):
+            classs=URIRef(a)
+            onproperty=URIRef(b)
+            maxcardinality= BNode(c)
+            g.add((classs, OWL.onProperty, onproperty))
+            g.add((classs, OWL.maxCardinality, maxcardinality))
+        elif (a.split('/')[0]!='http:') and (c.split('/')[0]!='http'):
+            classs=BNode(a)
+            onproperty=URIRef(b)
+            maxcardinality=BNode(c)
+            g.add((classs, OWL.onProperty, onproperty))
+            g.add((classs, OWL.maxCardinality, maxCardinality))
+
+
+
+    #firstrest
+    col1 = firstrest.iloc[:, 0].values
+    col2 = firstrest.iloc[:, 1].values
+    col3 = firstrest.iloc[:, 2].values
+    for (c1, c2, c3) in zip(col1, col2, col3):
+        s=c1.split(':')
+        if len(s)==1:
+            a=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            a=iri_dict[pre]+thing
+
+        s=c2.split(':')
+        if len(s)==1:
+            b=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            b=iri_dict[pre]+thing
+
+        s=c3.split(':')
+        if len(s)==1:
+            c=s[0]
+        else:
+            pre=s[0]
+            thing=s[1]
+            c=iri_dict[pre]+thing
+            
+        if (a.rsplit('/')[0] == 'http:') and (c.split('/')[0]=='http:'):
+            classs = URIRef(a)
+            first = URIRef(b)
+            rest=URIRef(c)
+            g.add((classs, RDF.first, first))
+            g.add((classs, RDF.rest, rest))
+        elif (a.split('/')[0]!='http:') and (c.split('/')[0]=='http:'):
+            classs=BNode(a)
+            first = URIRef(b)
+            rest=URIRef(c)
+            g.add((classs, RDF.first, first))
+            g.add((classs, RDF.rest, rest))
+        elif (a.split('/')[0]=='http:') and (c.split('/')[0]!='http'):
+            classs=URIRef(a)
+            first=URIRef(b)
+            rest= BNode(c)
+            g.add((classs, RDF.first, first))
+            g.add((classs, RDF.rest, rest))
+        elif (a.split('/')[0]!='http:') and (c.split('/')[0]!='http'):
+            classs=BNode(a)
+            first=URIRef(b)
+            rest=BNode(c)
+            g.add((classs, RDF.first, first))
+            g.add((classs, RDF.rest, rest))
 
     g.serialize(destination='output.owl', format='xml')
 
@@ -216,6 +577,20 @@ def main(file):
     # onproperty = pd.read_excel(file, sheet_name='onproperty')
     somevaluesfrom = pd.read_excel(file, sheet_name='somevaluesfrom')
     allvaluesfrom = pd.read_excel(file, sheet_name='allvaluesfrom')
+    maxcardinality = pd.read_excel(file, sheet_name='maxcardinality')
+    firstrest = pd.read_excel(file, sheet_name='firstrest')
+
+    
+    iri=pd.read_excel(file, sheet_name='prefixiri')
+
+    c1=iri.iloc[:,0].values
+    c2=iri.iloc[:,1].values
+    global iri_dict
+    iri_dict={}
+    for (a,b) in zip(c1,c2):
+        iri_dict[a]=b
+
+    
 
     csv_owl_final(subclass, domain_axiom, range_axiom, instances,
-                  subproperty, inverse, allvaluesfrom, somevaluesfrom, owlclass, g)
+                  subproperty, inverse, allvaluesfrom, somevaluesfrom,maxcardinality, owlclass,firstrest, g)
