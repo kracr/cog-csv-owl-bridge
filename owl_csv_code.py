@@ -1,3 +1,6 @@
+import logging
+
+
 import pandas as pd
 import re
 from base64 import encode
@@ -14,6 +17,8 @@ from rdflib.namespace import CSVW, DC, DCAT, DCTERMS, DOAP, FOAF, ODRL2, ORG, OW
     VOID, XMLNS, XSD
 import pprint
 import os
+# Configure logging
+
 
 
 def owl_csv_subclass(g, uri):
@@ -35,6 +40,7 @@ def owl_csv_subclass(g, uri):
         if (subj.rsplit('/')[0] == 'http:'):
             name = URIRef(subj)
             namespace, local_name = split_uri(str(name))
+            # a=local_name
             if namespace in uri:
                 a = uri[namespace]+":" + local_name
             else:
@@ -43,11 +49,12 @@ def owl_csv_subclass(g, uri):
                 uri[namespace] = prefix
                 a = uri[namespace]+":"+local_name
         else:
-            a = subj
+            a = '_:'+subj
         classs = (str)(obj).rsplit('/')[-1]
         if (obj.rsplit('/')[0] == 'http:'):
             name = URIRef(obj)
             namespace, local_name = split_uri(str(name))
+            # b=local_name
             if namespace in uri:
                 b = uri[namespace]+":" + local_name
             else:
@@ -56,7 +63,7 @@ def owl_csv_subclass(g, uri):
                 uri[namespace] = prefix
                 b = uri[namespace]+":"+local_name
         else:
-            b = obj
+            b = '_:'+obj
 
 #
         rows = [a, b]
@@ -94,6 +101,9 @@ def owl_csv_class(g, uri):
                 if (subject.rsplit('/')[0] == 'http:'):
                     name = URIRef(subject)
                     namespace, local_name = split_uri(str(name))
+                    print(namespace +" " + local_name)
+                    # rows=[local_name]
+                    # writer.writerow(rows)
                     if namespace in uri:
                         rows = [uri[namespace]+":" + local_name]
                         writer.writerow(rows)
@@ -104,7 +114,7 @@ def owl_csv_class(g, uri):
                         rows = [uri[namespace]+":"+local_name]
                         writer.writerow(rows)
                 else:
-                    rows = [subject]
+                    rows = ['_:'+subject]
                     writer.writerow(rows)
     f.close()
     # fields=['OWL Class']
@@ -136,6 +146,7 @@ def owl_csv_domain(g, uri):
             if (subject.rsplit('/')[0] == 'http:'):
                 name = URIRef(subject)
                 namespace, local_name = split_uri(str(name))
+                # a=local_name
                 if namespace in uri:
                     a = uri[namespace]+":" + local_name
                 else:
@@ -144,12 +155,13 @@ def owl_csv_domain(g, uri):
                     uri[namespace] = prefix
                     a = uri[namespace]+":"+local_name
             else:
-                a = subject
+                a = '_:'+subject
 
             domain = (str)(obj).rsplit('/')[-1]
             if (obj.rsplit('/')[0] == 'http:'):
                 name = URIRef(obj)
                 namespace, local_name = split_uri(str(name))
+                # b=local_name
                 if namespace in uri:
                     b = uri[namespace]+":" + local_name
                 else:
@@ -158,7 +170,7 @@ def owl_csv_domain(g, uri):
                     uri[namespace] = prefix
                     b = uri[namespace]+":"+local_name
             else:
-                b = obj
+                b = '_:'+obj
 
             rows = [a, b]
             writer.writerow(rows)
@@ -180,6 +192,7 @@ def owl_csv_range(g, uri):
             if (subject.rsplit('/')[0] == 'http:'):
                 name = URIRef(subject)
                 namespace, local_name = split_uri(str(name))
+                # a=local_name
                 if namespace in uri:
                     a = uri[namespace]+":" + local_name
                 else:
@@ -188,12 +201,13 @@ def owl_csv_range(g, uri):
                     uri[namespace] = prefix
                     a = uri[namespace]+":"+local_name
             else:
-                a = subject
+                a = '_:'+subject
 
             range = (str)(obj).rsplit('/')[-1]
             if (obj.rsplit('/')[0] == 'http:'):
                 name = URIRef(obj)
                 namespace, local_name = split_uri(str(name))
+                # b=local_name
                 if namespace in uri:
                     b = uri[namespace]+":" + local_name
                 else:
@@ -202,7 +216,7 @@ def owl_csv_range(g, uri):
                     uri[namespace] = prefix
                     b = uri[namespace]+":"+local_name
             else:
-                b = obj
+                b = '_:'+obj
 
             rows = [a, b]
             writer.writerow(rows)
@@ -227,15 +241,16 @@ def owl_csv_instances(g, uri):
 #                     objj=(str)(objj).rsplit('/')[-1]
 #                     print(subj + " " + objj)
 
-    for subject, predicate, obj in g:
+    for s, p, o in g:
+        if p == rdflib.RDF.type and o == rdflib.OWL.NamedIndividual:
+            for subject, predicate, obj in g:
+                if str(subject) == str(s) and str(p) == str(predicate) and obj != rdflib.OWL.NamedIndividual:
 
-        if predicate == rdflib.RDF.type:
-            for s, p, o in g.triples((None, rdflib.RDF.type, rdflib.RDFS.Class)):
-                if str(s) == str(obj):
                     subj = (str)(subject).rsplit('/')[-1]
                     if (subject.rsplit('/')[0] == 'http:'):
                         name = URIRef(subject)
                         namespace, local_name = split_uri(str(name))
+                        # a=local_name
                         if namespace in uri:
                             a = uri[namespace]+":" + local_name
                         else:
@@ -244,12 +259,13 @@ def owl_csv_instances(g, uri):
                             uri[namespace] = prefix
                             a = uri[namespace]+":"+local_name
                     else:
-                        a = subject
+                        a = '_:'+subject
 
                     objj = (str)(obj).rsplit('/')[-1]
                     if (obj.rsplit('/')[0] == 'http:'):
                         name = URIRef(obj)
                         namespace, local_name = split_uri(str(name))
+                        # b=local_name
                         if namespace in uri:
                             b = uri[namespace]+":" + local_name
                         else:
@@ -258,9 +274,9 @@ def owl_csv_instances(g, uri):
                             uri[namespace] = prefix
                             b = uri[namespace]+":"+local_name
                     else:
-                        b = obj
+                        b = '_:'+obj
 
-                    # print(subj + " " + objj)
+                # print(subj + " " + objj)
                     rows = [a, b]
                     writer.writerow(rows)
 
@@ -281,6 +297,7 @@ def owl_csv_subproperty(g, uri):
             if (subject.rsplit('/')[0] == 'http:'):
                 name = URIRef(subject)
                 namespace, local_name = split_uri(str(name))
+                # a=local_name
                 if namespace in uri:
                     a = uri[namespace]+":" + local_name
                 else:
@@ -289,11 +306,12 @@ def owl_csv_subproperty(g, uri):
                     uri[namespace] = prefix
                     a = uri[namespace]+":"+local_name
             else:
-                a = subject
+                a = '_:'+subject
             object_prop = (str)(obj).rsplit('/')[-1]
             if (obj.rsplit('/')[0] == 'http:'):
                 name = URIRef(obj)
                 namespace, local_name = split_uri(str(name))
+                # b=local_name
                 if namespace in uri:
                     b = uri[namespace]+":" + local_name
                 else:
@@ -302,7 +320,7 @@ def owl_csv_subproperty(g, uri):
                     uri[namespace] = prefix
                     b = uri[namespace]+":"+local_name
             else:
-                b = obj
+                b = '_:'+obj
             rows = [a, b]
             writer.writerow(rows)
 
@@ -323,6 +341,7 @@ def owl_csv_inverseof(g, uri):
             if (subject.rsplit('/')[0] == 'http:'):
                 name = URIRef(subject)
                 namespace, local_name = split_uri(str(name))
+                # a=local_name
                 if namespace in uri:
                     a = uri[namespace]+":" + local_name
                 else:
@@ -331,11 +350,12 @@ def owl_csv_inverseof(g, uri):
                     uri[namespace] = prefix
                     a = uri[namespace]+":"+local_name
             else:
-                a = subject
+                a = '_:'+subject
             object_prop = (str)(obj).rsplit('/')[-1]
             if (obj.rsplit('/')[0] == 'http:'):
                 name = URIRef(obj)
                 namespace, local_name = split_uri(str(name))
+                # b=local_name
                 if namespace in uri:
                     b = uri[namespace]+":" + local_name
                 else:
@@ -344,7 +364,7 @@ def owl_csv_inverseof(g, uri):
                     uri[namespace] = prefix
                     b = uri[namespace]+":"+local_name
             else:
-                b = obj
+                b = '_:'+obj
             rows = [a, b]
             writer.writerow(rows)
 
@@ -386,8 +406,6 @@ def owl_csv_allvaluesfrom(g, onproperty_dict, uri):
     fields = ['Class', 'OnProperty', 'Allvaluesfrom']
     writer1.writerow(fields)
 
-    
-    
     for i in allvaluesfrom_dict:
         if i in onproperty_dict:
             rows = [i, onproperty_dict[i], allvaluesfrom_dict[i]]
@@ -413,10 +431,11 @@ def owl_csv_allvaluesfrom(g, onproperty_dict, uri):
     fields = ['Class', 'OnProperty', 'allValuesFrom']
     writer4.writerow(fields)
     for (subject, predicate, obj) in zip(classs, onproperty, allvaluesfrom):
-        
+
         if (subject.rsplit('/')[0] == 'http:'):
             name = URIRef(subject)
             namespace, local_name = split_uri(str(name))
+            # a1=local_name
             if namespace in uri:
                 a1 = uri[namespace]+":" + local_name
             else:
@@ -425,11 +444,12 @@ def owl_csv_allvaluesfrom(g, onproperty_dict, uri):
                 uri[namespace] = prefix
                 a1 = uri[namespace]+":"+local_name
         else:
-            a1 = subject
+            a1 = '_:'+subject
 
         if (predicate.rsplit('/')[0] == 'http:'):
             name = URIRef(predicate)
             namespace, local_name = split_uri(str(name))
+            # b1=local_name
             if namespace in uri:
                 b1 = uri[namespace]+":" + local_name
             else:
@@ -438,22 +458,23 @@ def owl_csv_allvaluesfrom(g, onproperty_dict, uri):
                 uri[namespace] = prefix
                 b1 = uri[namespace]+":"+local_name
         else:
-            b1 = predicate
+            b1 = '_:'+predicate
 
         if (obj.rsplit('/')[0] == 'http:'):
             name = URIRef(obj)
             namespace, local_name = split_uri(str(name))
+            # c1=local_name
             if namespace in uri:
-                c1= uri[namespace]+":" + local_name
+                c1 = uri[namespace]+":" + local_name
             else:
                 prefix = 'ns'+str(count)
                 count += 1
                 uri[namespace] = prefix
                 c1 = uri[namespace]+":"+local_name
         else:
-            c1 = obj
+            c1 = '_:'+obj
         # print(a1+" "+ b1+" "+ c1)
-        rows=[a1,b1,c1]
+        rows = [a1, b1, c1]
         writer4.writerow(rows)
 
     f4.close()
@@ -512,10 +533,11 @@ def owl_csv_somevaluesfrom(g, onproperty_dict, uri):
     fields = ['Class', 'OnProperty', 'SomeValuesFrom']
     writer4.writerow(fields)
     for (subject, predicate, obj) in zip(classs, onproperty, somevaluesfrom):
-        
+
         if (subject.rsplit('/')[0] == 'http:'):
             name = URIRef(subject)
             namespace, local_name = split_uri(str(name))
+            # a1=local_name
             if namespace in uri:
                 a1 = uri[namespace]+":" + local_name
             else:
@@ -524,11 +546,12 @@ def owl_csv_somevaluesfrom(g, onproperty_dict, uri):
                 uri[namespace] = prefix
                 a1 = uri[namespace]+":"+local_name
         else:
-            a1 = subject
+            a1 = '_:'+subject
 
         if (predicate.rsplit('/')[0] == 'http:'):
             name = URIRef(predicate)
             namespace, local_name = split_uri(str(name))
+            # b1=local_name
             if namespace in uri:
                 b1 = uri[namespace]+":" + local_name
             else:
@@ -537,22 +560,23 @@ def owl_csv_somevaluesfrom(g, onproperty_dict, uri):
                 uri[namespace] = prefix
                 b1 = uri[namespace]+":"+local_name
         else:
-            b1 = predicate
+            b1 = '_:'+predicate
 
         if (obj.rsplit('/')[0] == 'http:'):
             name = URIRef(obj)
             namespace, local_name = split_uri(str(name))
+            # c1=local_name
             if namespace in uri:
-                c1= uri[namespace]+":" + local_name
+                c1 = uri[namespace]+":" + local_name
             else:
                 prefix = 'ns'+str(count)
                 count += 1
                 uri[namespace] = prefix
                 c1 = uri[namespace]+":"+local_name
         else:
-            c1 = obj
+            c1 = '_:'+obj
         # print(a1+" "+ b1+" "+ c1)
-        rows=[a1,b1,c1]
+        rows = [a1, b1, c1]
         writer4.writerow(rows)
 
     f4.close()
@@ -610,10 +634,11 @@ def owl_csv_maxcardinality(g, onproperty_dict, uri):
     fields = ['Class', 'OnProperty', 'maxCardinality']
     writer4.writerow(fields)
     for (subject, predicate, obj) in zip(classs, onproperty, maxcardinality):
-        
+
         if (subject.rsplit('/')[0] == 'http:'):
             name = URIRef(subject)
             namespace, local_name = split_uri(str(name))
+            # a1=local_name
             if namespace in uri:
                 a1 = uri[namespace]+":" + local_name
             else:
@@ -622,11 +647,12 @@ def owl_csv_maxcardinality(g, onproperty_dict, uri):
                 uri[namespace] = prefix
                 a1 = uri[namespace]+":"+local_name
         else:
-            a1 = subject
+            a1 = '_:'+subject
 
         if (predicate.rsplit('/')[0] == 'http:'):
             name = URIRef(predicate)
             namespace, local_name = split_uri(str(name))
+            # b1=local_name
             if namespace in uri:
                 b1 = uri[namespace]+":" + local_name
             else:
@@ -635,22 +661,23 @@ def owl_csv_maxcardinality(g, onproperty_dict, uri):
                 uri[namespace] = prefix
                 b1 = uri[namespace]+":"+local_name
         else:
-            b1 = predicate
+            b1 = '_:'+predicate
 
         if (obj.rsplit('/')[0] == 'http:'):
             name = URIRef(obj)
             namespace, local_name = split_uri(str(name))
+            # c1=local_name
             if namespace in uri:
-                c1= uri[namespace]+":" + local_name
+                c1 = uri[namespace]+":" + local_name
             else:
                 prefix = 'ns'+str(count)
                 count += 1
                 uri[namespace] = prefix
                 c1 = uri[namespace]+":"+local_name
         else:
-            c1 = obj
+            c1 = '_:'+obj
         # print(a1+" "+ b1+" "+ c1)
-        rows=[a1,b1,c1]
+        rows = [a1, b1, c1]
         writer4.writerow(rows)
 
     f4.close()
@@ -708,10 +735,11 @@ def owl_csv_firstrest(g, first_dict, uri):
     fields = ['Class', 'First', 'Rest']
     writer4.writerow(fields)
     for (subject, predicate, obj) in zip(classs, first, rest):
-        
+
         if (subject.rsplit('/')[0] == 'http:'):
             name = URIRef(subject)
             namespace, local_name = split_uri(str(name))
+            # a1=local_name
             if namespace in uri:
                 a1 = uri[namespace]+":" + local_name
             else:
@@ -720,11 +748,12 @@ def owl_csv_firstrest(g, first_dict, uri):
                 uri[namespace] = prefix
                 a1 = uri[namespace]+":"+local_name
         else:
-            a1 = subject
+            a1 = '_:'+subject
 
         if (predicate.rsplit('/')[0] == 'http:'):
             name = URIRef(predicate)
             namespace, local_name = split_uri(str(name))
+            # b1=local_name
             if namespace in uri:
                 b1 = uri[namespace]+":" + local_name
             else:
@@ -733,28 +762,43 @@ def owl_csv_firstrest(g, first_dict, uri):
                 uri[namespace] = prefix
                 b1 = uri[namespace]+":"+local_name
         else:
-            b1 = predicate
+            b1 = '_:'+predicate
 
         if (obj.rsplit('/')[0] == 'http:'):
             name = URIRef(obj)
             namespace, local_name = split_uri(str(name))
+            # c1=local_name
             if namespace in uri:
-                c1= uri[namespace]+":" + local_name
+                c1 = uri[namespace]+":" + local_name
             else:
                 prefix = 'ns'+str(count)
                 count += 1
                 uri[namespace] = prefix
                 c1 = uri[namespace]+":"+local_name
         else:
-            c1 = obj
+            c1 = '_:'+obj
         # print(a1+" "+ b1+" "+ c1)
-        rows=[a1,b1,c1]
+        rows = [a1, b1, c1]
         writer4.writerow(rows)
 
     f4.close()
 
-
     return 'firstrest.csv'
+
+def not_processing(g, uri):
+    logging.basicConfig(filename='logfile.log', level=logging.DEBUG)
+    for subject, predicate, obj in g:
+        if not ((predicate==RDFS.subClassOf) or (predicate == rdflib.RDF.type and obj == rdflib.OWL.Class) or (predicate == rdflib.RDFS.domain) or (predicate == rdflib.RDFS.range) or (predicate == rdflib.RDF.type and obj == rdflib.OWL.NamedIndividual) or (predicate == rdflib.RDFS.subPropertyOf) or (predicate == rdflib.OWL.inverseOf) or (predicate == rdflib.OWL.onProperty) or (predicate == rdflib.RDF.rest) or (predicate == rdflib.RDF.first)):
+            # print(subject)
+            # print(predicate)
+            # print(obj)
+            # print()
+            logging.error(subject)
+            logging.error(predicate)
+            logging.error(obj+'\n')
+            # logging.info('')
+
+
 
 
 def func():
@@ -765,8 +809,30 @@ uri = {}
 
 
 def main(file):
+    
     g = Graph()
+    
     g.parse(file)
+
+    # xml_str = g.serialize(format="xml")
+
+    # # search for the xml:base attribute using a regular expression
+    # match = re.search(r'xml:base="(.+?)"', xml_str)
+
+    # # extract the xml:base value if a match was found
+    # xml_base = match.group(1) if match else None
+
+    # # print the xml:base value
+    # print(xml_base)
+
+    
+    global count
+    count = 1
+    # if ontology_iri[-1]!='/' or ontology_iri[-1]!='#':
+    #     ontology_iri=ontology_iri+'#'
+    # uri[ontology_iri]='ns'+str(count)
+    # count+=1
+    # print(ontology_iri)
     fields = ['Class', 'OnProperty']
     onproperty_dict = {}
     f1 = open('onproperty.csv', 'w')
@@ -790,8 +856,7 @@ def main(file):
             rows = [subject, obj]
             first_dict[subject] = obj
             writer.writerow(rows)
-    global count
-    count = 1
+    
     f9 = owl_csv_class(g, uri)
     f1 = owl_csv_domain(g, uri)
     f2 = owl_csv_subclass(g, uri)
@@ -813,10 +878,14 @@ def main(file):
         writer.writerow(rows)
     furi.close()
     f10 = func()
-    writer = pd.ExcelWriter('output.xlsx', engine='xlsxwriter')
+    name=input('Output file name: ')
+    name=name+'.xlsx'
+    writer = pd.ExcelWriter(name, engine='xlsxwriter')
     for filename in [f9, f1, f2, f3, f4, f5, f6, f7, f8, f9, f11, f12, f10]:
         df = pd.read_csv(filename)
         sheet_name = os.path.splitext(os.path.basename(filename))[0]
         df.to_excel(writer, sheet_name=sheet_name, index=False)
 
     writer.save()
+    print('The default namespace for the ontology is '+ str(uri.get('ns1')))
+    not_processing(g, uri)
