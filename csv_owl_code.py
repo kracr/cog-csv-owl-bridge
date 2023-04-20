@@ -28,7 +28,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
     for c1 in class1:
         s=c1.split(':')
         if len(s)==1:
-            a=s[0]
+            a=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            a=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -58,7 +60,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c1.split(':')
         if len(s)==1:
-            a=s[0]
+            a=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            a=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -66,7 +70,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=p1.split(':')
         if len(s)==1:
-            b=s[0]
+            b=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            b=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -105,7 +111,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=o1.split(':')
         if len(s)==1:
-            a=s[0]
+            a=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            a=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -113,7 +121,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=d1.split(':')
         if len(s)==1:
-            b=s[0]
+            b=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            b=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -152,7 +162,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
     for (c1, c2) in zip(col1, col2):
         s=c1.split(':')
         if len(s)==1:
-            a=s[0]
+            a=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            a=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -160,7 +172,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c2.split(':')
         if len(s)==1:
-            b=s[0]
+            b=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            b=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -200,7 +214,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c1.split(':')
         if len(s)==1:
-            a=s[0]
+            a=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            a=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -208,7 +224,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c2.split(':')
         if len(s)==1:
-            b=s[0]
+            b=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            b=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -218,18 +236,22 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
             object = URIRef(a)
             classs = URIRef(b)
             g.add((object, RDF.type, classs))
+            g.add((object, RDF.type, OWL.NamedIndividual))
         elif (b.rsplit('/')[0] == 'http:') and (a.rsplit('/')[0] != 'http:'):
             object = URIRef(b)
             classs = BNode(a)
             g.add((object, RDF.type, classs))
+            g.add((object, RDF.type, OWL.NamedIndividual))
         elif (b.rsplit('/')[0] != 'http:') and (a.rsplit('/')[0] == 'http:'):
             object = URIRef(a)
             classs = BNode(b)
             g.add((object, RDF.type, classs))
+            g.add((object, RDF.type, OWL.NamedIndividual))
         else:
             object = BNode(a)
             classs = BNode(b)
             g.add((object, RDF.type, classs))
+            g.add((object, RDF.type, OWL.NamedIndividual))
 
         # url1 = "http://example.org/ontology/"+a
         # object = URIRef(a)
@@ -244,7 +266,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c1.split(':')
         if len(s)==1:
-            a=s[0]
+            a=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            a=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -252,7 +276,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c2.split(':')
         if len(s)==1:
-            b=s[0]
+            b=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            b=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -288,7 +314,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
         
         s=c1.split(':')
         if len(s)==1:
-            a=s[0]
+            a=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            a=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -296,7 +324,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c2.split(':')
         if len(s)==1:
-            b=s[0]
+            b=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            b=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -347,7 +377,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
     for (c1, c2, c3) in zip(col1, col2, col3):
         s=c1.split(':')
         if len(s)==1:
-            a=s[0]
+            a=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            a=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -355,7 +387,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c2.split(':')
         if len(s)==1:
-            b=s[0]
+            b=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            b=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -363,12 +397,13 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c3.split(':')
         if len(s)==1:
-            c=s[0]
+            c=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            c=s[1]
         else:
             pre=s[0]
             thing=s[1]
             c=iri_dict[pre]+thing
-            
 
         if (a.rsplit('/')[0] == 'http:') and (c.split('/')[0]=='http:'):
             classs = URIRef(a)
@@ -403,7 +438,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
     for (c1, c2, c3) in zip(col1, col2, col3):
         s=c1.split(':')
         if len(s)==1:
-            a=s[0]
+            a=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            a=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -411,7 +448,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c2.split(':')
         if len(s)==1:
-            b=s[0]
+            b=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            b=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -419,7 +458,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c3.split(':')
         if len(s)==1:
-            c=s[0]
+            c=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            c=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -458,7 +499,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
     for (c1, c2, c3) in zip(col1, col2, col3):
         s=c1.split(':')
         if len(s)==1:
-            a=s[0]
+            a=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            a=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -466,7 +509,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c2.split(':')
         if len(s)==1:
-            b=s[0]
+            b=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            b=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -474,7 +519,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c3.split(':')
         if len(s)==1:
-            c=s[0]
+            c=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            c=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -515,7 +562,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
     for (c1, c2, c3) in zip(col1, col2, col3):
         s=c1.split(':')
         if len(s)==1:
-            a=s[0]
+            a=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            a=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -523,7 +572,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c2.split(':')
         if len(s)==1:
-            b=s[0]
+            b=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            b=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -531,7 +582,9 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
 
         s=c3.split(':')
         if len(s)==1:
-            c=s[0]
+            c=iri_dict['ns1']+s[0]
+        elif s[0]=='_':
+            c=s[1]
         else:
             pre=s[0]
             thing=s[1]
@@ -562,7 +615,7 @@ def csv_owl_final(subclass, domain_axiom, range_axiom, instances, subproperty, i
             g.add((classs, RDF.first, first))
             g.add((classs, RDF.rest, rest))
 
-    g.serialize(destination='output.owl', format='xml')
+    g.serialize(destination='output.owl', format='xml', xmlns=iri_dict['ns1'],xml_base=iri_dict['ns1'], )
 
 
 def main(file):
@@ -582,15 +635,22 @@ def main(file):
 
     
     iri=pd.read_excel(file, sheet_name='prefixiri')
-
+    if iri.empty:
+        print('There is no default namespace for the ontology\n The default namespace for the ontology is taken as : http://www.semanticweb.org/rohitbhatia/ontologies/2023/3/ontology#')
+        namespace='http://www.semanticweb.org/rohitbhatia/ontologies/2023/3/ontology#'
+        row={'Prefix': 'ns1', 'Namespace': namespace}
+        iri=iri.append(row, ignore_index=True)
+    
     c1=iri.iloc[:,0].values
+    print(c1)
     c2=iri.iloc[:,1].values
+    print(c2)
     global iri_dict
     iri_dict={}
     for (a,b) in zip(c1,c2):
         iri_dict[a]=b
 
-    
+    print(iri_dict['ns1'])
 
     csv_owl_final(subclass, domain_axiom, range_axiom, instances,
                   subproperty, inverse, allvaluesfrom, somevaluesfrom,maxcardinality, owlclass,firstrest, g)
