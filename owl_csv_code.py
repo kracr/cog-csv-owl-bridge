@@ -886,6 +886,6 @@ def main(file):
         sheet_name = os.path.splitext(os.path.basename(filename))[0]
         df.to_excel(writer, sheet_name=sheet_name, index=False)
 
-    writer.save()
+    writer._save()
     print('The default namespace for the ontology is '+ str(uri.get('ns1')))
     not_processing(g, uri)
