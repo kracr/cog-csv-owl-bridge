@@ -1,6 +1,0 @@
-Prefix,Namespace
-ns1,http://xmlns.com/foaf/0.1/
-ns2,http://www.w3.org/2000/01/rdf-schema#
-ns3,http://www.w3.org/2003/01/geo/wgs84_pos#
-ns4,http://xmlns.com/wordnet/1.6/
-ns5,http://www.w3.org/2000/10/swap/pim/contact#
