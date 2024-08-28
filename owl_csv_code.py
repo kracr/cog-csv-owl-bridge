@@ -4,6 +4,7 @@ import logging
 import pandas as pd
 import re
 from base64 import encode
+from msilib.schema import Class
 from token import ENCODING
 import csv
 import rdflib
@@ -877,14 +878,18 @@ def main(file):
         writer.writerow(rows)
     furi.close()
     f10 = func()
-    name=input('Output file name: ')
-    name=name+'.xlsx'
+    name = input('Output file name: ')
+    name = name + '.xlsx'
     writer = pd.ExcelWriter(name, engine='xlsxwriter')
+
+    # Writing each CSV file to a separate sheet in the Excel file
     for filename in [f9, f1, f2, f3, f4, f5, f6, f7, f8, f9, f11, f12, f10]:
         df = pd.read_csv(filename)
         sheet_name = os.path.splitext(os.path.basename(filename))[0]
         df.to_excel(writer, sheet_name=sheet_name, index=False)
 
-    writer._save()
-    print('The default namespace for the ontology is '+ str(uri.get('ns1')))
+    # Saving the Excel file using the close method
+    writer.close()
+
+    print('The default namespace for the ontology is ' + str(uri.get('ns1')))
     not_processing(g, uri)
