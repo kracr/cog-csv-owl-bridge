@@ -1,6 +1,5 @@
 
 from base64 import encode
-from msilib.schema import Class
 from token import ENCODING
 import rdflib
 from rdflib import Graph, Literal, RDF, URIRef
