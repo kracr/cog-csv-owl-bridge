@@ -4,9 +4,9 @@ import csv_owl_code
 arg1=(str)(sys.argv[1])
 arg2=(str)(sys.argv[2])
 
-if arg1=="owl_to_csv":
+if arg1=="o2c":
     owl_csv_code.main(arg2)
-elif arg1=="csv_to_owl":
+elif arg1=="c2c":
     csv_owl_code.main(arg2)
     
     
