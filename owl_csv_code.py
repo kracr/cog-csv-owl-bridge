@@ -4,7 +4,6 @@ import logging
 import pandas as pd
 import re
 from base64 import encode
-from msilib.schema import Class
 from token import ENCODING
 import csv
 import rdflib
