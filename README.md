@@ -2,20 +2,14 @@
 
 COG is a lightweight framework that enables users to create, inspect, and maintain OWL ontologies using spreadsheets by supporting **bidirectional conversion between CSV/XLSX files and OWL**. The tool lowers the barrier to ontology authoring by allowing ontology construction without writing OWL syntax.
 
----
-
 ## 🎯 What This Repository Contains
 
 This repository serves as the **landing page** for the COG project.  
 All source code is organized inside subfolders, and each folder contains its own README describing its contents.
 
----
-
 ## 🎥 Demo Video
 
 ▶️ Project Demo: *(add your video link here)*
-
----
 
 ## 📌 Key Capabilities
 
@@ -32,8 +26,6 @@ All source code is organized inside subfolders, and each folder contains its own
   - Subproperties and property chains  
 - Automatic prefix extraction and reuse  
 - Generation of consolidated OWL output  
-
----
 
 ## 🗂️ Recommended Repository Structure
 cog-csv-owl-bridge/
@@ -63,8 +55,6 @@ cog-csv-owl-bridge/
 ├── LICENSE
 └── README.md
 
----
-
 ## ⚙️ Installation
 
 ```bash
@@ -75,8 +65,6 @@ source env/bin/activate        # Linux/Mac
 env\Scripts\activate           # Windows
 pip install pandas rdflib owlready2 numpy
 ```
-
----
 
 ## 🚀 Usage
 1. OWL → CSV/XLSX
@@ -106,9 +94,7 @@ python src/start.py csv_to_owl "path/to/input.xlsx"
   - instances.owl
   - subproperty.owl
   - combined.owl
- 
----
-
+    
 ## 🔁 Typical Workflow
 - Create CSV/XLSX → Generate OWL → View in Protégé
 - OWL → CSV/XLSX → Edit Spreadsheet → Rebuild OWL
@@ -120,8 +106,6 @@ python src/start.py csv_to_owl "path/to/input.xlsx"
 - build_tool/: Helper scripts and dependency installers.
 - testing_output/: Sample inputs and generated outputs.
 - comparison/: Scripts and files used to compare generated OWL artifacts.
-
----
 
 ## 🛠 Technologies
 - Python
@@ -136,19 +120,13 @@ python src/start.py csv_to_owl "path/to/input.xlsx"
 - Rapid ontology prototyping
 - Ontology debugging and inspection
 
----
-
 ## 📄 Citation
-
----
 
 ## 🤝 Contributing
 - Fork the repository
 - Create a new branch
 - Commit your changes
 - Open a Pull Request
-
----
 
 ## 📜 License
 - MIT License
