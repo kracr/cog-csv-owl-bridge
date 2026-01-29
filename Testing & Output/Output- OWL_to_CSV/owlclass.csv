@@ -1,1 +1,15 @@
 OWL Class
+owl2:Tissue
+owl2:Pericarditis
+owl2:Disease
+owl2:BodyValve
+ontologies:Class2
+owl2:Heartdisease
+owl2:HeartValve
+owl2:Endocarditis
+owl2:Heart
+owl2:Inflammation
+ontologies:Class1
+owl2:Pericardium
+owl2:Endocardium
+owl2:IsStateNeedsTreatment

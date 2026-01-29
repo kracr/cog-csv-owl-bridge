@@ -1,11 +1,3 @@
-subproperty,Object
-ns1:icqChatID,ns1:nick
-ns1:msnChatID,ns1:nick
-ns1:homepage,ns1:page
-ns1:yahooChatID,ns1:nick
-ns1:tipjar,ns1:page
-ns1:img,ns1:depiction
-ns1:jabberID,ns1:nick
-ns1:weblog,ns1:page
-ns1:aimChatID,ns1:nick
-ns1:name,ns2:label
+subproperty,role1,role2,superproperty
+owl2:part-of,,,owl2:contained-in
+chain,owl2:has-location,owl2:contained-in,owl2:has-location

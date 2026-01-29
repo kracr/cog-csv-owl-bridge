@@ -1,1 +1,5 @@
-Class,OnProperty
+ObjectProperty
+owl2:acts-on
+owl2:contained-in
+owl2:has-location
+owl2:part-of

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+   xmlns:owl="http://www.w3.org/2002/07/owl#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#Pericardium">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.example.org/2002/07/owl#Tissue"/>
+    <rdfs:subClassOf rdf:nodeID="N0e493d188d5b43e6b5962fb5b7685386"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Ncdce0d63fa8940eba6862cd51c67fb14">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.example.org/2002/07/owl#has-location"/>
+    <owl:someValuesFrom rdf:resource="http://www.example.org/2002/07/owl#Heart"/>
+    <rdfs:subClassOf rdf:resource="http://www.example.org/2002/07/owl#Heart"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nbdec7fbcaf7b47828f847fee65a3f694">
+    <owl:intersectionOf rdf:nodeID="N499f053ca0174280b5e94f606b3432c4"/>
+    <rdfs:subClassOf rdf:resource="http://www.example.org/2002/07/owl#IsStateNeedsTreatment"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N0a082dcd108a4269b5ea51832e5d7c7f">
+    <rdf:first rdf:resource="http://knoelab.wright.edu/ontologies#Class1"/>
+    <rdf:rest rdf:nodeID="N6a95e2a85bde43dc96558cfcf8aa9d98"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#IsStateNeedsTreatment">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nd951ffdfa2df44e1a8c666fa3d7ee6a6">
+    <rdf:first rdf:resource="http://www.example.org/2002/07/owl#Heartdisease"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#Heartdisease">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.example.org/2002/07/owl#Disease"/>
+    <rdfs:subClassOf rdf:nodeID="N847d0f54ef944516be7e551da87543b9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#HeartValve">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.example.org/2002/07/owl#BodyValve"/>
+    <rdfs:subClassOf rdf:nodeID="N572ed18ac043469090866819df6e6f0f"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nebb4faec2a024b6fa2bf86839900013e">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.example.org/2002/07/owl#contained-in"/>
+    <owl:someValuesFrom rdf:resource="http://www.example.org/2002/07/owl#HeartValve"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#Pericarditis">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.example.org/2002/07/owl#Inflammation"/>
+    <rdfs:subClassOf rdf:nodeID="N55581db9e0e54b9fb51d7ffb7ffdf095"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#Endocardium">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.example.org/2002/07/owl#Tissue"/>
+    <rdfs:subClassOf rdf:nodeID="Nebb4faec2a024b6fa2bf86839900013e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#BodyValve">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N55581db9e0e54b9fb51d7ffb7ffdf095">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.example.org/2002/07/owl#has-location"/>
+    <owl:someValuesFrom rdf:resource="http://www.example.org/2002/07/owl#Pericardium"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N65696dfbc8e94022b0ba4a8d273db330">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.example.org/2002/07/owl#has-location"/>
+    <owl:someValuesFrom rdf:resource="http://www.example.org/2002/07/owl#HeartValve"/>
+    <rdfs:subClassOf rdf:resource="http://www.example.org/2002/07/owl#HeartValve"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#has-location">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <owl:propertyChainAxiom rdf:nodeID="Nbe24ee337ce84fb78ef3d098f26f9ab5"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N0e493d188d5b43e6b5962fb5b7685386">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.example.org/2002/07/owl#contained-in"/>
+    <owl:someValuesFrom rdf:resource="http://www.example.org/2002/07/owl#Heart"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N572ed18ac043469090866819df6e6f0f">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.example.org/2002/07/owl#part-of"/>
+    <owl:someValuesFrom rdf:resource="http://www.example.org/2002/07/owl#Heart"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#Inflammation">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.example.org/2002/07/owl#Disease"/>
+    <rdfs:subClassOf rdf:nodeID="N96df09c4ee1a4097b6b338af3c24c257"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N96df09c4ee1a4097b6b338af3c24c257">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.example.org/2002/07/owl#acts-on"/>
+    <owl:someValuesFrom rdf:resource="http://www.example.org/2002/07/owl#Tissue"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N6a95e2a85bde43dc96558cfcf8aa9d98">
+    <rdf:first rdf:resource="http://www.example.org/2002/07/owl#Disease"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#Disease">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://knoelab.wright.edu/ontologies#Class1">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N499f053ca0174280b5e94f606b3432c4">
+    <rdf:first rdf:resource="http://knoelab.wright.edu/ontologies#Class2"/>
+    <rdf:rest rdf:nodeID="Nd951ffdfa2df44e1a8c666fa3d7ee6a6"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N847d0f54ef944516be7e551da87543b9">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.example.org/2002/07/owl#has-location"/>
+    <owl:someValuesFrom rdf:resource="http://www.example.org/2002/07/owl#Heart"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N97d4e7ef1d624280bc9f51f86466cef0">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.example.org/2002/07/owl#has-location"/>
+    <owl:someValuesFrom rdf:resource="http://www.example.org/2002/07/owl#Endocardium"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#Endocarditis">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.example.org/2002/07/owl#Inflammation"/>
+    <rdfs:subClassOf rdf:nodeID="N97d4e7ef1d624280bc9f51f86466cef0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#contained-in">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#acts-on">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N15272c61c34b410287e7cf9fb1b96f1a">
+    <owl:intersectionOf rdf:nodeID="N0a082dcd108a4269b5ea51832e5d7c7f"/>
+    <rdfs:subClassOf rdf:resource="http://www.example.org/2002/07/owl#Heartdisease"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#Heart">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nbe24ee337ce84fb78ef3d098f26f9ab5">
+    <rdf:first rdf:resource="http://www.example.org/2002/07/owl#has-location"/>
+    <rdf:rest rdf:nodeID="N794e7419f2b141bb9778359bedaf3eab"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N794e7419f2b141bb9778359bedaf3eab">
+    <rdf:first rdf:resource="http://www.example.org/2002/07/owl#contained-in"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://knoelab.wright.edu/ontologies#Class2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#Tissue">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.example.org/2002/07/owl#part-of">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.example.org/2002/07/owl#contained-in"/>
+  </rdf:Description>
+</rdf:RDF>

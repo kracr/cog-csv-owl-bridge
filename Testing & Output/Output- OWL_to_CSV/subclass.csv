@@ -1,16 +1,19 @@
-Class,Parent
-ns1:Person,ns4:Person
-ns1:Person,ns1:Agent
-ns1:Organization,ns1:Agent
-ns1:Group,ns1:Agent
-ns1:Person,ns5:Person
-ns1:Person,ns3:SpatialThing
-ns1:Document,ns4:Document
-ns1:Image,ns4:Document
-ns1:Organization,ns4:Organization
-ns1:Agent,ns4:Agent-3
-ns1:Project,ns4:Project
-ns1:PersonalProfileDocument,ns1:Document
-ns1:OnlineGamingAccount,ns4:OnlineAccount
-ns1:OnlineEcommerceAccount,ns4:OnlineAccount
-ns1:OnlineChatAccount,ns4:OnlineAccount
+Subclass,Restriction (onProperty),Restriction (quantifier),Superclass
+owl2:Endocarditis,,,owl2:Inflammation
+owl2:Pericarditis,,,owl2:Inflammation
+owl2:Endocarditis,owl2:has-location,some,owl2:Endocardium
+owl2:Endocardium,,,owl2:Tissue
+owl2:Pericardium,,,owl2:Tissue
+owl2:Endocardium,owl2:contained-in,some,owl2:HeartValve
+owl2:HeartValve,,,owl2:BodyValve
+owl2:HeartValve,owl2:part-of,some,owl2:Heart
+owl2:Heartdisease,,,owl2:Disease
+owl2:Inflammation,,,owl2:Disease
+owl2:Heartdisease,owl2:has-location,some,owl2:Heart
+owl2:Inflammation,owl2:acts-on,some,owl2:Tissue
+owl2:Pericarditis,owl2:has-location,some,owl2:Pericardium
+owl2:Pericardium,owl2:contained-in,some,owl2:Heart
+ontologies:Class2 & owl2:Heartdisease,,,owl2:IsStateNeedsTreatment
+,owl2:has-location,some,owl2:HeartValve
+,owl2:has-location,some,owl2:Heart
+ontologies:Class1 & owl2:Disease,,,owl2:Heartdisease
