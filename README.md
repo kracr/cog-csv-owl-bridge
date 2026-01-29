@@ -28,6 +28,7 @@ All source code is organized inside subfolders, and each folder contains its own
 - Generation of consolidated OWL output  
 
 ## 🗂️ Repository Structure
+```
 cog-csv-owl-bridge/
 │
 ├── src/
@@ -54,7 +55,7 @@ cog-csv-owl-bridge/
 │
 ├── LICENSE
 └── README.md
-
+```
 
 ## ⚙️ Installation
 
