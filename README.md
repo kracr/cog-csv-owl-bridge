@@ -27,33 +27,34 @@ All source code is organized inside subfolders, and each folder contains its own
 - Automatic prefix extraction and reuse  
 - Generation of consolidated OWL output  
 
-## 🗂️ Recommended Repository Structure
+## 🗂️ Repository Structure
 cog-csv-owl-bridge/
 │
 ├── src/
-│ ├── csv_to_owl/
-│ │ ├── csv_owl_code.py
-│ │ └── README.md
-│ │
-│ ├── owl_to_csv/
-│ │ ├── owl_csv_code.py
-│ │ ├── owl_csv_code_new.py
-│ │ └── README.md
-│ │
-│ ├── start.py
-│ └── README.md
+│   ├── csv_to_owl/
+│   │   ├── csv_owl_code.py
+│   │   └── README.md
+│   │
+│   ├── owl_to_csv/
+│   │   ├── owl_csv_code.py
+│   │   ├── owl_csv_code_new.py
+│   │   └── README.md
+│   │
+│   ├── start.py
+│   └── README.md
 │
 ├── build_tool/
-│ └── README.md
+│   └── README.md
 │
 ├── testing_output/
-│ └── README.md
+│   └── README.md
 │
 ├── comparison/
-│ └── README.md
+│   └── README.md
 │
 ├── LICENSE
 └── README.md
+
 
 ## ⚙️ Installation
 
