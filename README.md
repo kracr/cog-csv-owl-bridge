@@ -9,7 +9,7 @@ All source code is organized inside subfolders, and each folder contains its own
 
 ## 🎥 Demo Video
 
-▶️ Project Demo: *(add your video link here)*
+▶️ Tool Demo: <https://youtu.be/R1brWymSiQM>
 
 ## 📌 Key Capabilities
 
