@@ -122,8 +122,6 @@ python src/start.py csv_to_owl "path/to/input.xlsx"
 - Rapid ontology prototyping
 - Ontology debugging and inspection
 
-## 📄 Citation
-
 ## 🤝 Contributing
 - Fork the repository
 - Create a new branch
@@ -131,4 +129,4 @@ python src/start.py csv_to_owl "path/to/input.xlsx"
 - Open a Pull Request
 
 ## 📜 License
-- MIT License
+- Apache 2.0 License
